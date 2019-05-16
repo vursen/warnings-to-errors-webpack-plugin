@@ -2,14 +2,14 @@
 
 class WarningsToErrorsPlugin {
   constructor(options) {
-    this.options = options  
+    this.options = options
   }
-  
+
   apply(compiler) {
     if ('hooks' in compiler) {
-      compiler.hooks.shouldEmit.tap('WarningsToErrorsPlugin', this.handleHook);
+      compiler.hooks.shouldEmit.tap('WarningsToErrorsPlugin', this.handleHook.bind(this));
     } else {
-      compiler.plugin('should-emit', this.handleHook);
+      compiler.plugin('should-emit', this.handleHook.bind(this));
     }
   }
 
@@ -26,9 +26,9 @@ class WarningsToErrorsPlugin {
       }
     });
   }
-  
+
   filterWarnings(warnings) {
-    return warnings.filter((warning) => this.options.filterRegexp.test(warning)) 
+    return warnings.filter((warning) => this.options.filterRegexp.test(warning))
   }
 }
 
